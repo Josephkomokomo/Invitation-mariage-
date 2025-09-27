@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Invitation — Marie & Jean</title>
+<style>
+  :root{--accent:#b76e79;--bg:#0f1221;--card:#11121a}
+  body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;background:linear-gradient(120deg,#081026 0%, #0b1830 50%, #07121a 100%);color:#fff;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+  .wrap{width:100%;max-width:920px;background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(0,0,0,0.04));border-radius:18px;overflow:hidden;box-shadow:0 10px 30px rgba(2,6,23,0.6)}
+  header{padding:28px 28px 0;display:flex;gap:16px;align-items:center}
+  .title{flex:1}
+  .title h1{margin:0;font-size:clamp(20px,3.2vw,34px);letter-spacing:0.6px}
+  .title p{margin:6px 0 0;opacity:0.85}
+  .hero{display:grid;grid-template-columns:1fr 360px;gap:20px;padding:24px}
+  .left{padding:20px}
+  .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.02));border-radius:12px;padding:18px}
+  /* diaporama */
+  .slideshow{position:relative;height:300px;border-radius:10px;overflow:hidden}
+  .slide{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;transform:scale(1.04);transition:opacity .9s ease, transform .9s ease}
+  .slide.active{opacity:1;transform:scale(1)}
+  .controls{display:flex;gap:8px;justify-content:flex-end;margin-top:12px}
+  button{background:transparent;border:1px solid rgba(255,255,255,0.08);color:inherit;padding:8px 12px;border-radius:8px;cursor:pointer}
+  .music-btn{display:inline-flex;gap:8px;align-items:center}
+  footer{padding:16px 24px 28px;display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+  .cta{display:flex;gap:8px}
+  .big-btn{background:var(--accent);border:none;padding:10px 14px;border-radius:10px;color:#fff;font-weight:600;cursor:pointer}
+  /* petites animations */
+  .sparkle{position:absolute;right:14px;top:10px;opacity:.12;font-size:24px;animation:float 6s linear infinite}
+  @keyframes float{0%{transform:translateY(0)}50%{transform:translateY(-8px)}100%{transform:translateY(0)}}
+  /* responsive */
+  @media (max-width:880px){
+    .hero{grid-template-columns:1fr; padding:14px}
+    .slideshow{height:240px}
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="title">
+        <h1>Marie & Jean — 12 octobre 2025</h1>
+        <p>Venez partager un mot, une photo ou un souvenir pour notre grand jour ✨</p>
+      </div>
+      <div>
+        <button id="musicToggle" class="music-btn">▶️ Musique</button>
+      </div>
+    </header>
+
+    <div class="hero">
+      <div class="left">
+        <div class="card">
+          <div style="position:relative">
+            <div class="slideshow" id="slideshow">
+              <div class="slide active" style="background-image:url('https://images.unsplash.com/photo-1506521781261-9b6f0fe3a9d0?w=1400&q=80')"></div>
+              <div class="slide" style="background-image:url('https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=1400&q=80')"></div>
+              <div class="slide" style="background-image:url('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1400&q=80')"></div>
+            </div>
+            <div class="sparkle">✨</div>
+          </div>
+
+          <div class="controls">
+            <button id="prev">‹</button>
+            <button id="next">›</button>
+          </div>
+
+          <div style="margin-top:14px">
+            <p>Programme : <strong>Cérémonie 15h • Réception 18h</strong></p>
+            <p style="margin-top:8px">Adresse : Maison des invités, Kinshasa — <a href="#" style="color:#ffd1de">Voir sur la carte</a></p>
+          </div>
+        </div>
+      </div>
+
+      <aside class="card" style="padding:18px">
+        <h3>Laisser un message</h3>
+        <p>Cliquez pour laisser un mot qui sera lu pendant la soirée.</p>
+        <div style="margin-top:12px">
+          <a class="big-btn" href="https://forms.gle/REMPLACE_PAR_TON_FORM">Écrire un message</a>
+        </div>
+        <div style="margin-top:18px;opacity:0.9">
+          <h4>Galerie</h4>
+          <p>Glisse les photos ou scanne pour voir plus.</p>
+        </div>
+      </aside>
+    </div>
+
+    <footer>
+      <small>Merci de célébrer avec nous — RSVP via le formulaire</small>
+      <div class="cta">
+        <button onclick="document.location='#'">Partager</button>
+        <button onclick="window.print()">Imprimer</button>
+      </div>
+    </footer>
+  </div>
+
+<script>
+  // diaporama simple
+  const slides = document.querySelectorAll('.slide');
+  let i = 0;
+  function show(n){
+    slides.forEach((s,idx)=> s.classList.toggle('active', idx===n));
+  }
+  document.getElementById('next').addEventListener('click', ()=>{ i=(i+1)%slides.length; show(i); });
+  document.getElementById('prev').addEventListener('click', ()=>{ i=(i-1+slides.length)%slides.length; show(i); });
+  // autoplay
+  setInterval(()=>{ i=(i+1)%slides.length; show(i); }, 5000);
+
+  // musique (mobile bloque autoplay: on propose bouton)
+  const musicBtn = document.getElementById('musicToggle');
+  const audio = new Audio('https://p.scdn.co/mp3-preview/2a2ecddbb...'); // remplacer par ton mp3 public
+  audio.loop = true;
+  let playing = false;
+  musicBtn.addEventListener('click', async ()=>{
+    if(!playing){
+      try{ await audio.play(); playing=true; musicBtn.textContent='⏸️ Stop musique'; }
+      catch(e){ alert('Lecture bloquée sur ce navigateur — appuie encore sur le bouton pour autoriser.'); }
+    } else { audio.pause(); playing=false; musicBtn.textContent='▶️ Musique'; }
+  });
+</script>
+</body>
+</html>
